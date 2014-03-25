@@ -95,3 +95,9 @@ In VS 2013, just open the .sln file.  When you build, nuGet should automatically
 You should probably add the [MonoDevelop nuGet Addin](https://github.com/mrward/monodevelop-nuget-addin).
 
 Right click each project, and "Restore nuGet Packages."  It should automatically download dependent libraries (BouncyCastle and CryptSharp, at the time of this writing).
+
+## Community ##
+
+Presently, there's just this github project.  And I haven't yet created any "real" mailing list or anything.  I figure if a bunch of people become interested, it will give me motivation to create such a group.  For now, it was just super easy for me to create a simple dumb distribution list.  Anyone may write to [cbcrypt-dev@conceptblossom.com](mailto://cbcrypt-dev@conceptblossom.com) 
+
+If you'd like to receive mail that others post, please just say so, and I'll manually add you to the group.  And as soon as the numbers become annoying to me, we'll create a normal internet discussion list.
