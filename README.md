@@ -79,3 +79,19 @@ To address this one issue, if you want to introduce a salt, whenever a user chan
 - If an attacker requests salt for a nonexistent user, the server must emulate a user, in order to prevent leaking information about the existence of a specific username.  The server must store this fake user and salt, and occasionally change its salt, emulating a real user.
 
 Given that the difficulty and complexity of introducing a salt to the system is significant, and that the only benefit is defense against precomputed password guesses for a targeted user on a targeted server...  Given that there are other better ways to deal with this, it is very realistic to go forward without salting in CBcrypt.  If you choose to go forward without salting, it is recommended to enforce a password aging and complexity policy, to minimize the possibility for an attacker to ever brute force guess a targeted user's password.
+
+## Project Status ##
+
+This project is brand new in March 2014.  Basic functionality is present and I believe it's all secure, but it needs community review.  And it would be nice to improve the documentation and extend the functionality - presently it's using Sha256 and ECDH, and should be easily able to plugin different algorithms, but none of the alternatives have been added yet.
+
+## How To Build ##
+
+### Visual Studio ###
+
+In VS 2013, just open the .sln file.  When you build, nuGet should automatically fetch dependent libraries (BouncyCastle, CryptSharp, at the time of this writing.)
+
+### MonoDevelop / Xamarin Studio ###
+
+You should probably add the [MonoDevelop nuGet Addin](https://github.com/mrward/monodevelop-nuget-addin).
+
+Right click each project, and "Restore nuGet Packages."  It should automatically download dependent libraries (BouncyCastle and CryptSharp, at the time of this writing).
