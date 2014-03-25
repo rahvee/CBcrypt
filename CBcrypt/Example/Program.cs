@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CBcryptlib;
+using Org.BouncyCastle.Asn1.X509;
+using Org.BouncyCastle.X509;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Crypto.Digests;
@@ -131,8 +135,8 @@ namespace Example
             // The following values for salt & SCryptHashOfPublicKey, I got once, by generating a salt, generating the public key of syndrome,
             // SCrypt hashing it, and making a copy of the salt & hash.  Pasted below.  Via SaveUser.
             var newUserInfo = new UserInfo();
-            newUserInfo.Salt = Convert.FromBase64String("uAtNXeGMq8CzLl7JtcEO58Hx43As5qAPC1zJ0rYZkMw=");
-            newUserInfo.SCryptHashOfPublicKey = Convert.FromBase64String("+jLD0VKKPBKa2h1g+qOuwpGAwzRziAIs7QDLCrU4ARA=");
+            newUserInfo.Salt = Convert.FromBase64String("vlyHqwz1wCC3VtgfWoV+FL09y7v4EpkWeMEHYd5GB7E=");
+            newUserInfo.SCryptHashOfPublicKey = Convert.FromBase64String("dIJKdUcw1L1VxG1U9adgMVFTbTz3whLmJylSdcy8Zao=");
             this.userDatabase["syndrome"] = newUserInfo;
         }
         public void SaveUser(string username, AsymmetricKeyParameter clientPublicKey)
@@ -144,15 +148,8 @@ namespace Example
             var rng = new RNGCryptoServiceProvider();
             rng.GetBytes(myRandomSalt);
 
-            string publicKeyString;
-            using (var stringWriter = new StringWriter())
-            {
-                var pemWriter = new PemWriter(stringWriter);
-                pemWriter.WriteObject(clientPublicKey);
-                pemWriter.Writer.Flush();
-                publicKeyString = stringWriter.ToString();
-            }
-            byte[] publicKeyBytes = Encoding.UTF8.GetBytes( publicKeyString );
+            SubjectPublicKeyInfo clientPublicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(clientPublicKey);
+            byte[] clientPublicKeyInfoBytes = clientPublicKeyInfo.ToAsn1Object().GetDerEncoded();
 
             var SCryptParams = new SCryptParameters()   // These parameters cause SCrypt to take ~175-350ms on Core i5-540M, 2.5Ghz
             {
@@ -160,7 +157,7 @@ namespace Example
                 cost = 16384,
                 parallel = 1,
                 maxThreads = null,
-                key = publicKeyBytes,
+                key = clientPublicKeyInfoBytes,
                 salt = myRandomSalt,
                 derivedKeyLength = 32,
             };
@@ -210,23 +207,18 @@ namespace Example
                 encryptor.TransformBlock(challengePlaintext, 0, challengePlaintext.Length, challengeCiphertext, 0);
             }
 
-            string publicKeyString;
-            using (var stringWriter = new StringWriter())
-            {
-                var pemWriter = new PemWriter(stringWriter);
-                pemWriter.WriteObject(clientPublicKey);
-                pemWriter.Writer.Flush();
-                publicKeyString = stringWriter.ToString();
-            }
-            byte[] publicKeyBytes = Encoding.UTF8.GetBytes(publicKeyString);
+            SubjectPublicKeyInfo clientPublicKeyInfo = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(clientPublicKey);
+            byte[] clientPublicKeyInfoBytes = clientPublicKeyInfo.ToAsn1Object().GetDerEncoded();
 
+            // We store the client's public key, but we salt & stretch it some more, to ensure a standard minimum level of at-rest protection,
+            // just in case the client has a low-powered device that didn't do enough of this in the first place.
             var SCryptParams = new SCryptParameters()   // These parameters cause SCrypt to take ~175-350ms on Core i5-540M, 2.5Ghz
             {
                 blockSize = 2,
                 cost = 16384,
                 parallel = 1,
                 maxThreads = null,
-                key = publicKeyBytes,
+                key = clientPublicKeyInfoBytes,
                 salt = null,
                 derivedKeyLength = 32,
             };
