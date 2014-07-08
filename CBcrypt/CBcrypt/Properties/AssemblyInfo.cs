@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CBcryptlib")]
+[assembly: AssemblyTitle("CBCrypt")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CBcryptlib")]
+[assembly: AssemblyProduct("CBCrypt")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d8033e78-1c41-4d39-a37c-7117796438dc")]
+[assembly: Guid("5514a466-d0cb-40f6-8528-ab8bce243267")]
 
 // Version information for an assembly consists of the following four values:
 //

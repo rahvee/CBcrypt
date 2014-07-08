@@ -1,166 +1,144 @@
 ﻿using System;
-using System.Collections.Generic;
-using CryptSharp.Utility;
+// using CryptSharp.Utility;    // Today, doesn't conflict with bouncycastle. But bouncycastle has an implementation of SCrypt might come out someday
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Prng;
 
-namespace CBcryptlib
+namespace CBCrypt
 {
-    public class SCryptParameters
+    public static class CBCrypt
     {
         /// <summary>
-        /// The key to derive from.
+        /// Applies RateLimitingFunction to the LowCostSecret.  Returns a HighCostSecret, dkLength = 32 bytes
+        /// 
+        /// NOTICE:  Zero's out LowCostSecret before returning.
         /// </summary>
-        public byte[] key;
-
-        /// <summary>
-        /// The salt.  A unique salt means a unique SCrypt stream, even if the original
-        /// key is identical.
-        /// </summary>
-        public byte[] salt;
-        
-        /// <summary>
-        /// The cost parameter, typically a fairly large number such as 262144.  Memory
-        /// usage and CPU time scale approximately linearly with this parameter.
-        /// </summary>
-        public int cost;
-        
-        /// <summary>
-        /// The mixing block size, typically 8.  Memory usage and CPU time scale approximately
-        /// linearly with this parameter.
-        /// </summary>
-        public int blockSize;
-        
-        /// <summary>
-        /// The level of parallelism, typically 1.  CPU time scales approximately linearly
-        /// with this parameter.
-        /// </summary>
-        public int parallel;
-        
-        /// <summary>
-        /// The maximum number of threads to spawn to derive the key.  This is limited
-        /// by the parallel value.  null will use as many threads as possible.
-        /// </summary>
-        public int? maxThreads;
-        
-        /// <summary>
-        /// The desired length of the derived key.
-        /// </summary>
-        public int derivedKeyLength;
-    }
-    public static class CBcrypt
-    {
-        /// <summary>
-        /// Some day we may implement other rate-limiting functions, but for now SCrypt is the only option.
-        /// </summary>
-        public static byte[] DoWorkfactor (byte[] preWorkFactorSecret)
+        private static byte[] DoRateLimitingFunction(byte[] LowCostSecret)
         {
-            // If any salt is going to be used, it has already been folded into the preWorkFactorSecret, so it's not needed here.
-            // I am not sure if any implementations of SCrypt require the salt to be non-null, or a specific length,
-            // so the following I'm sure, will work.
-            var zeroSalt = new byte[32];
-            Array.Clear(zeroSalt,0,zeroSalt.Length);
-
-            var SCryptParams = new SCryptParameters()   // These parameters cause SCrypt to take ~175-350ms on Core i5-540M, 2.5Ghz
-            {
-                blockSize = 2,
-                cost = 16384,
-                parallel = 1,
-                maxThreads = null,
-                key = preWorkFactorSecret,
-                salt = zeroSalt,
-                derivedKeyLength = 32,
-            };
-
-            return DoWorkfactor(SCryptParams);
-        }
-        public static byte[] DoWorkfactor (SCryptParameters SCryptParams)
-        {
-            // long before = DateTime.UtcNow.Ticks;
-            byte[] retVal = SCrypt.ComputeDerivedKey
+            /* cost 4096, blockSize 8, parallel 1, cause SCrypt to take ~175-350ms on Core i5-540M, 2.5Ghz
+             * This is in addition to the approx 100ms-200ms to generate ECDSA keypair.
+             */
+            const int dkLength = 32;
+            byte[] retVal = CryptSharp.Utility.SCrypt.ComputeDerivedKey
                 (
-                key: SCryptParams.key, 
-                salt: SCryptParams.salt, 
-                cost: SCryptParams.cost, 
-                blockSize: SCryptParams.blockSize, 
-                parallel: SCryptParams.parallel, 
-                maxThreads: SCryptParams.maxThreads, 
-                derivedKeyLength: SCryptParams.derivedKeyLength
+                key: LowCostSecret,         // scrypt will transform this into a high cost secret
+                salt: new byte[16],         // zero salt
+                cost: 4096,                 // To scale the cost, scale this parameter.  Scale is approximately linear.
+                blockSize: 8,               // this is a recommended default by the scrypt authors
+                parallel: 1,                // this is a recommended default by the scrypt authors
+                maxThreads: null,
+                derivedKeyLength: dkLength  // 32 is surely large enough not to lose any entropy of the user supplied password
                 );
-            // long after = DateTime.UtcNow.Ticks;
-            // double elapsed = ((double)(after - before)) / TimeSpan.TicksPerSecond;
-            // System.Console.Error.WriteLine(elapsed.ToString());
+            Array.Clear(LowCostSecret, 0, LowCostSecret.Length);
             return retVal;
         }
+
         /// <summary>
-        /// Returns a seed generated from the inputFactors.  At least 1 inputFactor must be provided
-        /// null is disallowed, and zero-length is disallowed.  Some day we may implement variants with different hashes,
-        /// but for now it's hard-coded to use Sha256 returning 32 bytes
+        /// Returns a seed generated from the parameters. Some day we may implement variants with different hashes,
+        /// but for now it's hard-coded to use Sha256 returning 32 bytes.
         /// </summary>
-        public static byte[] GetPreWorkfactorSecret(IList<byte[]> inputFactors)
+        private static byte[] GetLowCostSecret(string CBCryptHostId, string username, string password)
         {
-            if (inputFactors == null)
+            if (CBCryptHostId == null)
             {
-                throw new ArgumentNullException("inputFactors");
+                throw new ArgumentNullException("CBCryptHostId");
             }
-            if (inputFactors.Count < 1)
+            if (username == null)
             {
-                throw new ArgumentException("inputFactors must have at least 1 component, and recommend at least hostname, username, and password");
+                throw new ArgumentNullException("username");
             }
-            byte[] hmacKey = new byte[32];
-            Array.Clear(hmacKey, 0, hmacKey.Length);
-            foreach (byte[] inputFactor in inputFactors)
+            if (password == null)
             {
-                if (inputFactor == null)
-                {
-                    throw new ArgumentNullException("inputFactors");
-                }
-                if (inputFactor.Length == 0)
-                {
-                    throw new ArgumentException("inputFactors must not be zero-length");
-                }
-                using (var hmac = new System.Security.Cryptography.HMACSHA256(hmacKey))
-                {
-                    hmacKey = hmac.ComputeHash(inputFactor);
-                }
+                throw new ArgumentNullException("password");
             }
-            return hmacKey;
+            if (CBCryptHostId.Length < 1)
+            {
+                throw new ArgumentException("CBCryptHostId must not be blank");
+            }
+            if (username.Length < 1)
+            {
+                throw new ArgumentException("username must not be blank");
+            }
+            if (password.Length < 1)
+            {
+                throw new ArgumentException("password must not be blank");
+            }
+            byte[] CBCryptHostIdBytes = System.Text.Encoding.UTF8.GetBytes(CBCryptHostId);
+            byte[] usernameBytes = System.Text.Encoding.UTF8.GetBytes(username);
+            byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
+
+            /* We want to distill all the inputs down to a single hash, which is unique given the specific set of inputs.
+             * It is important that we don't get the same hash output, if there's any variation of the inputs - in other words, 
+             * we must be resilient to concatenation.
+             *
+             * The two ways readily available were to HMAC each input, in turn using the previous HMAC as the key for the next.  Or, 
+             * first hash each input separately and independently of each other, and then hash a concatenation of all the hashes.
+             * The second is slightly faster, as if that matters.  Which is why we're using it.
+             */
+            using (var hashFunction = System.Security.Cryptography.SHA256.Create())
+            {
+                // factorHashes : byte array that will contain the concatenated hashes of all the inputFactors
+                int hashSizeInBytes = hashFunction.HashSize / 8;
+                const int thisArgc = 3;
+                var factorHashes = new byte[hashSizeInBytes * thisArgc];
+                int factorHashesPos = 0;
+                byte[] factorHash;
+
+                factorHash = hashFunction.ComputeHash(CBCryptHostIdBytes);
+                Array.Clear(CBCryptHostIdBytes, 0, CBCryptHostIdBytes.Length);
+                Array.Copy(factorHash, 0, factorHashes, factorHashesPos, factorHash.Length);
+                Array.Clear(factorHash, 0, factorHash.Length);
+                factorHashesPos += hashSizeInBytes;
+
+                factorHash = hashFunction.ComputeHash(usernameBytes);
+                Array.Clear(usernameBytes, 0, usernameBytes.Length);
+                Array.Copy(factorHash, 0, factorHashes, factorHashesPos, factorHash.Length);
+                Array.Clear(factorHash, 0, factorHash.Length);
+                factorHashesPos += hashSizeInBytes;
+
+                factorHash = hashFunction.ComputeHash(passwordBytes);
+                Array.Clear(passwordBytes, 0, passwordBytes.Length);
+                Array.Copy(factorHash, 0, factorHashes, factorHashesPos, factorHash.Length);
+                Array.Clear(factorHash, 0, factorHash.Length);
+                // factorHashesPos += hashSizeInBytes;      // this is actually unnecessary cuz it's the last one
+
+                byte[] output = hashFunction.ComputeHash(factorHashes);
+                Array.Clear(factorHashes, 0, factorHashes.Length);
+                return output;
+            }
         }
+
         /// <summary>
+        /// Returns seeded PRNG
         /// Someday, we might want to add more variants on digests.  But for now, Sha256 is the only option.
         /// </summary>
-        public static SecureRandom GetSeededDigestRandomGenerator(byte[] seed)
+        private static SecureRandom GetSeededDigestRandomGenerator(byte[] seed)
         {
-            // By default, SecureRandom creates Sha1Digest with 8 bytes of seed based on DateTime.Now.Ticks.  
-            // Which is not very secure at all.  But we won't do anything of the sort.
             var prng = new DigestRandomGenerator(new Sha256Digest());
             prng.AddSeedMaterial(seed);
             return new SecureRandom(prng);
         }
+
         /// <summary>
-        /// Someday, we might want to add different types of Asymmetric Key Pairs.  But for now, ECDH 256 is the only option.
+        /// Returns the keypair derived from the parameters.
+        /// Someday, we might want to add different types of Asymmetric Key Pairs.  But for now, ECDSA/256 is 
+        /// the only option.
         /// </summary>
-        public static AsymmetricCipherKeyPair GenerateKeyPair(byte[] Factor)
+        public static AsymmetricCipherKeyPair GenerateKeyPair(string CBCryptHostId, string username, string password)
         {
-            List<byte[]> factors = new List<byte[]>();
-            factors.Add(Factor);
-            return GenerateKeyPair(factors);
-        }
-        public static AsymmetricCipherKeyPair GenerateKeyPair(IList<byte[]> Factors)
-        {
-            byte[] preWorkFactorSecret = GetPreWorkfactorSecret(Factors);
-            byte[] postWorkFactorSecret = DoWorkfactor(preWorkFactorSecret);
-            SecureRandom seededPRNG = GetSeededDigestRandomGenerator(postWorkFactorSecret);
+            byte[] lowCostSecret = GetLowCostSecret(CBCryptHostId, username, password);
+            byte[] highCostSecret = DoRateLimitingFunction(lowCostSecret);
+            SecureRandom seededPRNG = GetSeededDigestRandomGenerator(highCostSecret);
 
             // Algorithm possibilities:  "EC", "ECDSA", "ECDH", "ECDHC", "ECGOST3410", "ECMQV"
             // Default if none specified:  "EC"
-            var ec = new ECKeyPairGenerator("ECDH");
+            var ec = new ECKeyPairGenerator("ECDSA");
             // strength parameters:  192, 224, 239, 256, 384, 521
             var keyGenParams = new KeyGenerationParameters(seededPRNG, 256);
             ec.Init(keyGenParams);
+
             return ec.GenerateKeyPair();
         }
     }
