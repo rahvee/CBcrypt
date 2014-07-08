@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
+using System;
 using CBCrypt;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Asn1.Pkcs;
@@ -8,12 +8,12 @@ using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Security;
 
-namespace UnitTest
+namespace NUnitTest
 {
-    [TestClass]
-    public class UnitTest
+    [TestFixture()]
+    public class Test
     {
-        [TestMethod]
+        [Test()]
         public void Test_CBCrypt_GenerateKeyPair()
         {
             // Pretend a client deterministically generates a keypair to login to server, derived from ServerID, username, password.
@@ -63,3 +63,4 @@ namespace UnitTest
         }
     }
 }
+
