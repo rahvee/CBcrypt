@@ -1,4 +1,9 @@
-CBcrypt
+CBCrypt (https://www.cbcrypt.org) is MIT licensed (see below) and is
+dependent on BouncyCastle (http://www.bouncycastle.org), which is also MIT 
+licensed.  (http://www.bouncycastle.org/csharp/licence.html).  CBCrypt is 
+also dependent on SCrypt (subset of CryptSharp) 
+(http://www.zer7.com/software/cryptsharp) which is ISC licensed
+(http://www.zer7.com/files/oss/cryptsharp/License.txt)
 
 The MIT License (MIT)
 
