@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpTOC>
+
+  <HelpTOCNode Id="1ca77620-712f-4345-9eec-53ac73e81480" Title="CBCrypt Namespace" Url="html/977195788.htm">
+    <HelpTOCNode Id="5c2e77de-388f-48cf-aad0-af58dd4aa5bf" Title="CBCrypt Class" Url="html/1678092925.htm">
+      <HelpTOCNode Title="CBCrypt Members" Url="html/1878512583.htm" />
+      <HelpTOCNode Id="b6afaf1e-6a40-4ac4-80dd-9ba3e18f6084" Title="CBCrypt Methods" Url="html/755539668.htm">
+        <HelpTOCNode Title="GenerateKeyPair Method " Url="html/417802857.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+  </HelpTOCNode>
+</HelpTOC>

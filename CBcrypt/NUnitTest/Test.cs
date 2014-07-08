@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace NUnitTest
 {
-    public class TraceConsoleListener : TraceListener
+    public sealed class TraceConsoleListener : TraceListener
     {
         public static TraceConsoleListener Listener = new TraceConsoleListener();
         public override void Write(string message)

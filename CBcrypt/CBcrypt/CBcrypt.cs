@@ -18,7 +18,7 @@ namespace CBCrypt
         private static byte[] DoRateLimitingFunction(byte[] LowCostSecret)
         {
             /* cost 4096, blockSize 8, parallel 1, cause SCrypt to take ~175-350ms on Core i5-540M, 2.5Ghz
-             * This is in addition to the approx 200ms to generate ECDSA keypair.
+             * This is in addition to the approx 100ms-200ms to generate ECDSA keypair.
              */
             const int dkLength = 32;
             byte[] retVal = CryptSharp.Utility.SCrypt.ComputeDerivedKey

@@ -44,8 +44,28 @@ In the long run, it will be good to abstract this conceptually, formalize a comm
 
 Presently, the implementation is as follows:
 
+- CBCrypt.GenerateKeyPair() accepts precisely three arguments. None of which may be null or blank: string CBCryptHostId, string username, string password.
+- LowCostSecret is derived by UTF8 encoding to bytes, each argument in order, and SHA256 hashing each argument in order, to create a concatenation of hashes, and then hash the concatenated hashes. The resultant hash should be unique for any unique combination of CBCryptHostID/username/password.
+- HighCostSecret is derived by using SCrypt on the LowCostSecret.  Using SCrypt parameters: 16-byte all-zero salt, cost 4096, blockSize 8, parallel 1.
+- SeededPRNG is a SHA256 digest random generator, seeded by HighCostSecret.
+- Keypair is ECDSA 256, derived from SeededPRNG
+
+
 ## Documentation and API ##
 
+The entire API consists of just one static method:
+
+    AsymmetricCipherKeyPair CBCrypt.GenerateKeyPair(string CBCryptHostId, string username, string password)
+
+Returns the ECDSA-256 keypair derived from the parameters.
+
+For example usage, please see the NUnit Test <https://raw.githubusercontent.com/rahvee/CBcrypt/master/CBcrypt/NUnitTest/Test.cs>
+
+## Download ##
+
+Please use NuGet to add CBCrypt to your project.
+
+If desired, source code is available here: <https://github.com/rahvee/CBcrypt>
 
 ## License ##
 
