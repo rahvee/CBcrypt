@@ -132,24 +132,14 @@ namespace CBCrypt
             byte[] highCostSecret = DoRateLimitingFunction(lowCostSecret);
             SecureRandom seededPRNG = GetSeededDigestRandomGenerator(highCostSecret);
 
-            AsymmetricCipherKeyPair retVal = null;
+            // Algorithm possibilities:  "EC", "ECDSA", "ECDH", "ECDHC", "ECGOST3410", "ECMQV"
+            // Default if none specified:  "EC"
+            var ec = new ECKeyPairGenerator("ECDSA");
+            // strength parameters:  192, 224, 239, 256, 384, 521
+            var keyGenParams = new KeyGenerationParameters(seededPRNG, 256);
+            ec.Init(keyGenParams);
 
-            for (int i = 0; i < 1; i++)
-            {
-                DateTime beforeKeyGen = DateTime.Now;
-                // Algorithm possibilities:  "EC", "ECDSA", "ECDH", "ECDHC", "ECGOST3410", "ECMQV"
-                // Default if none specified:  "EC"
-                var ec = new ECKeyPairGenerator("ECDSA");
-                // strength parameters:  192, 224, 239, 256, 384, 521
-                var keyGenParams = new KeyGenerationParameters(seededPRNG, 256);
-                ec.Init(keyGenParams);
-                retVal = ec.GenerateKeyPair();
-                DateTime afterKeyGen = DateTime.Now;
-
-                System.Diagnostics.Trace.WriteLine("KeyGen Cost: " + (afterKeyGen - beforeKeyGen).ToString());
-            }
-
-            return retVal;
+            return ec.GenerateKeyPair();
         }
     }
 }

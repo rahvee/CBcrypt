@@ -7,12 +7,33 @@ using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Security;
+using System.Diagnostics;
 
 namespace NUnitTest
 {
+    public class TraceConsoleListener : TraceListener
+    {
+        public static TraceConsoleListener Listener = new TraceConsoleListener();
+        public override void Write(string message)
+        {
+            Console.Write(message);
+        }
+        public override void WriteLine(string message)
+        {
+            Console.WriteLine(message);
+        }
+    }
+
     [TestFixture()]
     public class Test
     {
+        [SetUp()]
+        public void Init()
+        {
+            if (false == Trace.Listeners.Contains(TraceConsoleListener.Listener))
+                Trace.Listeners.Add(TraceConsoleListener.Listener);
+        }
+
         [Test()]
         public void Test_CBCrypt_GenerateKeyPair()
         {
