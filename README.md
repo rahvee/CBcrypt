@@ -4,7 +4,7 @@ Next-generation user authentication, beyond bcrypt, scrypt, pbkdf2
 
 ## In a Nutshell ##
 
-CBCrypt deterministically generates an asymmetric keypair from servername, username, and password. Users can authenticate to the server without ever sending their password.
+CBCrypt deterministically generates an asymmetric keypair from servername, username, and password with rate-limiting function applied client-side, before making an authentication attempt to the server. The user's password is kept secret even from the server they're logging into.
 
 Take it as granted, that many different authentication techniques exist in the world (password, public/private keypair, x509 certificate, etc).  Each of these techniques has their own strengths and weaknesses, and none of them is going away anytime soon.  CBcrypt focuses specifically on improving one of those techniques:  Password authentication.
 
