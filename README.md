@@ -4,13 +4,17 @@ Next-generation user authentication, beyond bcrypt, scrypt, pbkdf2
 
 ## In a Nutshell ##
 
+CBCrypt deterministically generates an asymmetric keypair from servername, username, and password. Users can authenticate to the server without ever sending their password.
+
 Take it as granted, that many different authentication techniques exist in the world (password, public/private keypair, x509 certificate, etc).  Each of these techniques has their own strengths and weaknesses, and none of them is going away anytime soon.  CBcrypt focuses specifically on improving one of those techniques:  Password authentication.
 
 CBcrypt combines publicly known authentication factors (typically username and server id) with secret factors (password), applies a rate-limiting work function such as scrypt or pbkdf2, to deterministically generate a random seed.  This seed is then used in a pseudo-random number generator (prng), and the prng is used as the basis for generating a public/private keypair.  The end result is a deterministically generated keypair, which can only be derived by knowing the user's secret password, and working forward through the rate limiting function.  In this way, a user can authenticate using a password, without ever exposing the password to the server or the network.
 
+As currently implemented, the rate limiting function parameters and the key generation parameters have been selected to require a total approx 200ms-500ms on a modern laptop.
+
 Without CBcrypt, if a server or communication channel is compromised (for example, heartbleed, etc) then the attacker gains the ability to impersonate users, and probably the ability to impersonate them at other servers, where the same password was reused, and all the data on the server is compromised.
 
-With CBcrypt, even if a server or communication channel is compromised (for example, heartbleed, etc) the attacker does not learn users' passwords, and does not gain the ability to impersonate them on other sites.  The attacker doesn't even gain the ability to impersonate them on the *compromised* server.  And if the user's data on the compromised server is encrypted using the user's keypair, then even the users' data is still protected.
+With CBcrypt, even if a server or communication channel is compromised (for example, heartbleed, etc) the attacker does not learn users' passwords, and does not gain the ability to impersonate them on other sites.  The attacker doesn't even gain the ability to impersonate them on the *compromised* server.  And if the user's data on the compromised server is encrypted using the user's keypair, then even the users' data is still protected.  (Note: ECDSA can only be used for encryption between two parties; cannot be used for encryption when saving ciphertext for one's self at a later time. If this feature is desired, the workaround is to DER encode the private key, hash it, and use the hash of the private key as an encryption key.  Example code in Unit Test.)
 
 ## The Problem ##
 
