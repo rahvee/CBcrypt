@@ -123,7 +123,7 @@ namespace CBCrypt
 
         /// <summary>
         /// Returns the keypair derived from the parameters.
-        /// Someday, we might want to add different types of Asymmetric Key Pairs.  But for now, ECDSA/256 is 
+        /// Someday, we might want to add different types of Asymmetric Key Pairs.  But for now, ECDH/256 is 
         /// the only option.
         /// </summary>
         public static AsymmetricCipherKeyPair GenerateKeyPair(string CBCryptHostId, string username, string password)
@@ -134,7 +134,7 @@ namespace CBCrypt
 
             // Algorithm possibilities:  "EC", "ECDSA", "ECDH", "ECDHC", "ECGOST3410", "ECMQV"
             // Default if none specified:  "EC"
-            var ec = new ECKeyPairGenerator("ECDSA");
+            var ec = new ECKeyPairGenerator("ECDH");
             // strength parameters:  192, 224, 239, 256, 384, 521
             var keyGenParams = new KeyGenerationParameters(seededPRNG, 256);
             ec.Init(keyGenParams);

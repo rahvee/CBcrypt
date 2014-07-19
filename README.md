@@ -14,7 +14,7 @@ As currently implemented, the rate limiting function parameters and the key gene
 
 Without CBcrypt, if a server or communication channel is compromised (for example, heartbleed, etc) then the attacker gains the ability to impersonate users, and probably the ability to impersonate them at other servers, where the same password was reused, and all the data on the server is compromised.
 
-With CBcrypt, even if a server or communication channel is compromised (for example, heartbleed, etc) the attacker does not learn users' passwords, and does not gain the ability to impersonate them on other sites.  The attacker doesn't even gain the ability to impersonate them on the *compromised* server.  And if the user's data on the compromised server is encrypted using the user's keypair, then even the users' data is still protected.  (Note: ECDSA can only be used for encryption between two parties; cannot be used for encryption when saving ciphertext for one's self at a later time. If this feature is desired, the workaround is to DER encode the private key, hash it, and use the hash of the private key as an encryption key.  Example code in Unit Test.)
+With CBcrypt, even if a server or communication channel is compromised (for example, heartbleed, etc) the attacker does not learn users' passwords, and does not gain the ability to impersonate them on other sites.  The attacker doesn't even gain the ability to impersonate them on the *compromised* server.  And if the user's data on the compromised server is encrypted using the user's keypair, then even the users' data is still protected.  (Note: For authentication, it would seem more natural to use ECDSA and sign/verify, but it cannot be assumed that a single EC keypair is safe to use for both ECDSA and ECDH, and ECDSA cannot be used for encryption, and we desire to use the EC keypair for encryption. So we are using ECDH which is a little more difficult but works just fine.)
 
 ## The Problem ##
 
@@ -52,7 +52,7 @@ Presently, the implementation is as follows:
 - LowCostSecret is derived by UTF8 encoding to bytes, each argument in order, and SHA256 hashing each argument in order, to create a concatenation of hashes, and then hash the concatenated hashes. The resultant hash should be unique for any unique combination of CBCryptHostID/username/password.
 - HighCostSecret is derived by using SCrypt on the LowCostSecret.  Using SCrypt parameters: 16-byte all-zero salt, cost 4096, blockSize 8, parallel 1.
 - SeededPRNG is a SHA256 digest random generator, seeded by HighCostSecret.
-- Keypair is ECDSA 256, derived from SeededPRNG
+- Keypair is ECDH 256, derived from SeededPRNG
 
 
 ## Documentation and API ##
@@ -61,7 +61,7 @@ The entire API consists of just one static method:
 
     AsymmetricCipherKeyPair CBCrypt.GenerateKeyPair(string CBCryptHostId, string username, string password)
 
-Returns the ECDSA-256 keypair derived from the parameters.
+Returns the ECDH-256 keypair derived from the parameters.
 
 For example usage, please see the NUnit Test <https://raw.githubusercontent.com/rahvee/CBcrypt/master/CBcrypt/NUnitTest/Test.cs>
 
