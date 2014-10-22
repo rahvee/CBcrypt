@@ -1,6 +1,6 @@
 # CBcrypt #
 
-Next-generation user authentication, beyond bcrypt, scrypt, pbkdf2
+Next-generation secure password authentication, beyond bcrypt, scrypt, pbkdf2
 
 ## In a Nutshell ##
 
