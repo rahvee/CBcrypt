@@ -122,24 +122,39 @@ namespace CBCrypt
         }
 
         /// <summary>
-        /// Returns the keypair derived from the parameters.
-        /// Someday, we might want to add different types of Asymmetric Key Pairs.  But for now, ECDH/256 is 
-        /// the only option.
+        /// Returns the ECDH/256 keypair derived from the parameters.
         /// </summary>
         public static AsymmetricCipherKeyPair GenerateKeyPair(string CBCryptHostId, string username, string password)
         {
+			byte[] highCostSecret = GenerateHighCostSecret(CBCryptHostId, username, password);
+			return GenerateKeyPair(highCostSecret);
+        }
+		/// <summary>
+		/// Returns the ECDH/256 keypair derived from the HighCostSecret
+		/// This allows a client to save HighCostSecret, and regenerate the key at a later time without asking user for password
+		/// </summary>
+		public static AsymmetricCipherKeyPair GenerateKeyPair(byte[] HighCostSecret)
+		{
+			SecureRandom seededPRNG = GetSeededDigestRandomGenerator(HighCostSecret);
+
+			// Algorithm possibilities:  "EC", "ECDSA", "ECDH", "ECDHC", "ECGOST3410", "ECMQV"
+			// Default if none specified:  "EC"
+			var ec = new ECKeyPairGenerator("ECDH");
+			// strength parameters:  192, 224, 239, 256, 384, 521
+			var keyGenParams = new KeyGenerationParameters(seededPRNG, 256);
+			ec.Init(keyGenParams);
+
+			return ec.GenerateKeyPair();
+		}
+		/// <summary>
+		/// Returns the HighCostSecret derived from the parameters
+		/// This allows a client to save HighCostSecret, and regenerate the key at a later time without asking user for password
+		/// </summary>
+		public static byte[] GenerateHighCostSecret(string CBCryptHostId, string username, string password)
+		{
             byte[] lowCostSecret = GetLowCostSecret(CBCryptHostId, username, password);
             byte[] highCostSecret = DoRateLimitingFunction(lowCostSecret);
-            SecureRandom seededPRNG = GetSeededDigestRandomGenerator(highCostSecret);
-
-            // Algorithm possibilities:  "EC", "ECDSA", "ECDH", "ECDHC", "ECGOST3410", "ECMQV"
-            // Default if none specified:  "EC"
-            var ec = new ECKeyPairGenerator("ECDH");
-            // strength parameters:  192, 224, 239, 256, 384, 521
-            var keyGenParams = new KeyGenerationParameters(seededPRNG, 256);
-            ec.Init(keyGenParams);
-
-            return ec.GenerateKeyPair();
-        }
+			return highCostSecret;
+		}
     }
 }
