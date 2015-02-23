@@ -57,9 +57,25 @@ Presently, the implementation is as follows:
 
 ## Documentation and API ##
 
-The entire API consists of just one static method:
+The entire API consists of just three static methods:
 
+    /// <summary>
+    /// Returns the ECDH/256 keypair derived from the parameters.
+    /// </summary>
     AsymmetricCipherKeyPair CBCrypt.GenerateKeyPair(string CBCryptHostId, string username, string password)
+    
+    /// <summary>
+    /// Returns the ECDH/256 keypair derived from the HighCostSecret
+    /// This allows a client to save HighCostSecret, and regenerate the key at a later time without asking user for password
+    /// </summary>
+    AsymmetricCipherKeyPair CBCrypt.GenerateKeyPair(byte[] HighCostSecret)
+    
+    /// <summary>
+    /// Returns the HighCostSecret derived from the parameters
+    /// This allows a client to save HighCostSecret, and regenerate the key at a later time without asking user for password
+    /// </summary>
+    byte[] CBCrypt.GenerateHighCostSecret(string CBCryptHostId, string username, string password)
+
 
 Returns the ECDH-256 keypair derived from the parameters.
 
