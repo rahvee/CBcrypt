@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
-using CBCrypt;
+using Org.CBCrypt;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Pkcs;
@@ -101,7 +101,7 @@ namespace NUnitTest
             /* 
              *   2. The client uses CBCrypt.GenerateKeyPair() to convert the password into a keypair.
              */
-            AsymmetricCipherKeyPair clientKeyPair = CBCrypt.CBCrypt.GenerateKeyPair(CBCryptHostId: CBCryptHostId, username: "syndrome", password: "kronos");
+            AsymmetricCipherKeyPair clientKeyPair = CBCrypt.GenerateKeyPair(CBCryptHostId: CBCryptHostId, username: "syndrome", password: "kronos");
             // We're going to need to send the public key to the server.
             byte[] clientPublicDer = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(clientKeyPair.Public).GetDerEncoded();
 

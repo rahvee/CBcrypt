@@ -6,7 +6,7 @@ using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Prng;
 
-namespace CBCrypt
+namespace Org.CBCrypt
 {
     public static class CBCrypt
     {
