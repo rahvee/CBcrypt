@@ -21,6 +21,11 @@ namespace Org.CBCrypt
 			 * This is in addition to the approx 100ms-200ms to generate ECDSA keypair.
 			 */
 			const int dkLength = 32;
+
+			/* The reason I'm chopping SCrypt out of this for now is: I want to do code signing, and the SCrypt assembly is not signed.
+			 * So basically I have to chop it out, or sign *their* assembly.
+			 * PBKDF2 might not be quite as strong as scrypt, but it's pretty reasonable for general use.
+
 			byte[] retVal = CryptSharp.Utility.SCrypt.ComputeDerivedKey
 				(
 				key: LowCostSecret,         // scrypt will transform this into a high cost secret
@@ -31,8 +36,21 @@ namespace Org.CBCrypt
 				maxThreads: null,
 				derivedKeyLength: dkLength  // 32 is surely large enough not to lose any entropy of the user supplied password
 				);
-			Array.Clear(LowCostSecret, 0, LowCostSecret.Length);
-			return retVal;
+			*/
+
+			/* On my 2.2Ghz Core i7, I got about 79,000 iterations for 1 sec using .NET in a VMWare virtual machine on mac.
+			 * On my 2.2Ghz Core i7, I got about 60,000 iterations for 1 sec using mono on the host mac.
+			 * If we assume the average CPU out there does 70,000 iterations per sec, then 200ms ~= 14,000 iterations
+			 */
+			const int iterations = 14000;
+
+			// salt is completely arbitrary in this context. I generated a random salt once, just so it's non-zero. Superstition.
+			var salt = new byte[] {0xB6,0x01,0x9F,0x43,0x71,0xB5,0xB5,0x34,0xF3,0x86,0x21,0x84,0xFF,0x3E,0x96,0xBF,0x30};
+			using (var pbkdf2 = new System.Security.Cryptography.Rfc2898DeriveBytes(LowCostSecret, salt, iterations)) {
+				byte[] retVal = pbkdf2.GetBytes(dkLength);
+				Array.Clear(LowCostSecret, 0, LowCostSecret.Length);
+				return retVal;
+			}
 		}
 
 		/// <summary>
