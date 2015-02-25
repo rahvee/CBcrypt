@@ -7,7 +7,7 @@
     <ProjectGuid>{7AEFCC6A-DD32-4286-9839-5A4765D7E94C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CBCrypt</RootNamespace>
+    <RootNamespace>Org.CBCrypt</RootNamespace>
     <AssemblyName>CBCrypt</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
