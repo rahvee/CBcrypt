@@ -23,6 +23,10 @@ namespace Org.CBCrypt
 		public string CBCryptHostId { get; set; }
 		public byte[] ServerPublicKeyDerEncoded { get; set; }
 
+		public Challenge()
+		{
+			// Empty constructor is requirement for deserialization
+		}
 		public Challenge(string CBCryptHostId)
 		{
 			this.CBCryptHostId = CBCryptHostId;

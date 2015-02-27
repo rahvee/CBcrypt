@@ -50,11 +50,13 @@ namespace NUnitTest
 			 *      Server sends Challenge to client.
 			 *   2. The client checks that CBCryptHostId matches the SSL Cert Subject.
 			 *   3. The client generates clientKey from CBCryptHostId, username, and password
-			 *   4. The client generates ChallengeResponse from clientKey and serverChallenge. Sends ChallengeResponse to server
+			 *   4. The client generates ChallengeResponse from clientKey and serverChallengeDeserialized. Sends ChallengeResponse to server
 			 *   5. The server does TryValidateChallengeResponse, to ensure the client knows the client's private key
 			 *   6. The server stores or looks up ChallengeResponse.PublicKeyDerEncoded, to confirm this user matches a known user
 			 */
 
+			// We're going to need this later, just because I'm choosing to use Newtonsoft.Json for test serialization.
+			var jsonSettings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All, Formatting = Formatting.Indented };
 
 			/*
 			 *   0. The client connects to server via SslStream
@@ -82,19 +84,18 @@ namespace NUnitTest
 			 * is configurable, so heed this warning.
 			 * The stream should contain properties "ChallengeBytes" , "CBCryptHostId" , "ServerPublicKeyDerEncoded"
 			 * The stream should NOT contain "ServerEphemeralKey"
-			 * 
-			 * This is how the server *would* serialize and send Challenge to client.  Commented out for NUnitTest.
-			 * var jsonSettings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All, Formatting = Formatting.Indented };
-			 * string serverChallengeSerialized = JsonConvert.SerializeObject(serverChallenge, jsonSettings);
-			 * byte[] bytes = System.Text.Encoding.UTF8.GetBytes(serverChallengeSerialized);
-			 * sslStream.Write(bytes, 0, bytes.Length);
 			 */
+			string serverChallengeString = JsonConvert.SerializeObject(serverChallenge, jsonSettings);
+			byte[] serverChallengeBytes = System.Text.Encoding.UTF8.GetBytes(serverChallengeString);
+			// sslStream.Write(serverChallengeBytes, 0, serverChallengeBytes.Length);
 
 			/* 
 			 *   2. The client checks that CBCryptHostId matches the SSL Cert Subject.
 			 */
+			string serverChallengeStringAgain = System.Text.Encoding.UTF8.GetString(serverChallengeBytes);
+			var serverChallengeDeserialized = (Challenge)JsonConvert.DeserializeObject(serverChallengeStringAgain, jsonSettings);
 			// TODO: ISSUE #1 CBCryptHostId must match DNS name exactly https://github.com/rahvee/CBcrypt/issues/1
-			if (hostname != serverChallenge.CBCryptHostId) {
+			if (hostname != serverChallengeDeserialized.CBCryptHostId) {
 				// If the user has already been prompted and accepted an invalid SSL cert, just continue as if 
 				// hostname and CBCryptHostIdSentToClient actually matched.
 				// Otherwise, prompt user about mismatching CBCryptHostId, which should exactly match the DNS name of the server.
@@ -107,7 +108,7 @@ namespace NUnitTest
 			// array, and store those bytes encrypted on disk. I might suggest using System.Security.Cryptography.ProtectedData.
 			// In this way, the password is stored as safely as it possibly can be - salted, stretched, hashed, and additionally 
 			// encrypted - Later, you can generate new CBCryptKey(HighCostSecret)
-			var clientKey = new CBCryptKey(CBCryptHostId: serverChallenge.CBCryptHostId, username: "syndrome", password: "kronos");
+			var clientKey = new CBCryptKey(CBCryptHostId: serverChallengeDeserialized.CBCryptHostId, username: "syndrome", password: "kronos");
 
 			/*
 			 *   3a.  Unit testing
@@ -122,15 +123,19 @@ namespace NUnitTest
 			Assert.IsTrue(clientPublicBase64 == @"MIIBKjCB4wYHKoZIzj0CATCB1wIBATAsBgcqhkjOPQEBAiEA/////wAAAAEAAAAAAAAAAAAAAAD///////////////8wWwQg/////wAAAAEAAAAAAAAAAAAAAAD///////////////wEIFrGNdiqOpPns+u9VXaYhrxlHQawzFOw9jvOPD4n0mBLAxUAxJ02CIbnBJNqZnjhE50mt4GffpAEIQNrF9Hy4SxCR/i85uVjpEDydwN9gS3rM6D0oTlF2JjClgIhAP////8AAAAA//////////+85vqtpxeehPO5ysL8YyVRAgEBA0IABDaM1UPl14Gq5yM4T4zpl2KPaB9CGiMhjNJv/PmMJC0dh/ayytfoGZ0CuS7EiHLK37Y5rq5Q10FOsK2z6UjYugY=");
 
 			/*
-			 *   4. The client generates ChallengeResponse from clientKey and serverChallenge. Sends ChallengeResponse to server
+			 *   4. The client generates ChallengeResponse from clientKey and serverChallengeDeserialized. Sends ChallengeResponse to server
 			 */
-			var challengeResponse = new ChallengeResponse(clientKey, serverChallenge);
-			// Just go ahead and serialize challengeResponse, to send to server.
+			var challengeResponse = new ChallengeResponse(clientKey, serverChallengeDeserialized);
+			string challengeResponseString = JsonConvert.SerializeObject(challengeResponse, jsonSettings);
+			byte[] challengeResponseBytes = System.Text.Encoding.UTF8.GetBytes(challengeResponseString);
+			// sslStream.Write(challengeResponseBytes, 0, challengeResponseBytes.Length);
 
 			/*
 			 *   5. The server does TryValidateChallengeResponse, to ensure the client knows the client's private key
 			 */
-			Assert.IsTrue(serverChallenge.TryValidateChallengeResponse(challengeResponse), "Failed TryValidateChallengeResponse");
+			string challengeResponseStringAgain = System.Text.Encoding.UTF8.GetString(challengeResponseBytes);
+			var challengeResponseDeserialized = (ChallengeResponse)JsonConvert.DeserializeObject(challengeResponseStringAgain, jsonSettings);
+			Assert.IsTrue(serverChallenge.TryValidateChallengeResponse(challengeResponseDeserialized), "Failed TryValidateChallengeResponse");
 
 			/*
 			 *   6. The server stores or looks up ChallengeResponse.PublicKeyDerEncoded, to confirm this user matches a known user
