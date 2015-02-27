@@ -57,29 +57,13 @@ Presently, the implementation is as follows:
 
 ## Documentation and API ##
 
-The entire API consists of just three static methods:
+For example usage, please see the NUnit Test. <https://raw.githubusercontent.com/rahvee/CBcrypt/master/CBcrypt/NUnitTest/Test.cs>
 
-    /// <summary>
-    /// Returns the ECDH/256 keypair derived from the parameters.
-    /// </summary>
-    AsymmetricCipherKeyPair CBCrypt.GenerateKeyPair(string CBCryptHostId, string username, string password)
-    
-    /// <summary>
-    /// Returns the ECDH/256 keypair derived from the HighCostSecret
-    /// This allows a client to save HighCostSecret, and regenerate the key at a later time without asking user for password
-    /// </summary>
-    AsymmetricCipherKeyPair CBCrypt.GenerateKeyPair(byte[] HighCostSecret)
-    
-    /// <summary>
-    /// Returns the HighCostSecret derived from the parameters
-    /// This allows a client to save HighCostSecret, and regenerate the key at a later time without asking user for password
-    /// </summary>
-    byte[] CBCrypt.GenerateHighCostSecret(string CBCryptHostId, string username, string password)
+If you need the full API for any reason:
 
+For windows users, we recommend downloading the chm file (compressed html, displays natively in your windows help dialog by just double-clicking the chm file).  <https://github.com/rahvee/CBcrypt/raw/master/Documentation/CBCrypt.chm>
 
-Returns the ECDH-256 keypair derived from the parameters.
-
-For example usage, please see the NUnit Test <https://raw.githubusercontent.com/rahvee/CBcrypt/master/CBcrypt/NUnitTest/Test.cs>
+The html when viewed in a web browser, doesn't render quite as nicely, but here it is, for anyone who doesn't want or can't use the chm.  <https://www.cbcrypt.org/API>
 
 ## Download ##
 

@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CBCrypt.cs" />
+    <Compile Include="CBCryptKey.cs" />
+    <Compile Include="Challenge.cs" />
+    <Compile Include="ChallengeResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
