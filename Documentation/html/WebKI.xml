@@ -1,17 +1,83 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <HelpKI>
   <HelpKINode Title="CBCrypt class">
-    <HelpKINode Title="CBCrypt Class" Url="html/1678092925.htm" />
-    <HelpKINode Title="CBCrypt Members" Url="html/1878512583.htm" />
-    <HelpKINode Title="about CBCrypt class" Url="html/1678092925.htm" />
-    <HelpKINode Title="all members" Url="html/1878512583.htm" />
-    <HelpKINode Title="methods" Url="html/755539668.htm" />
+    <HelpKINode Title="CBCrypt Class" Url="html/1718333260.htm" />
+    <HelpKINode Title="CBCrypt Members" Url="html/998664710.htm" />
+    <HelpKINode Title="about CBCrypt class" Url="html/1718333260.htm" />
+    <HelpKINode Title="all members" Url="html/998664710.htm" />
+    <HelpKINode Title="methods" Url="html/463588477.htm" />
   </HelpKINode>
-  <HelpKINode Title="CBCrypt namespace" Url="html/977195788.htm" />
-  <HelpKINode Title="CBCrypt.CBCrypt class">
-    <HelpKINode Title="CBCrypt Class" Url="html/1678092925.htm" />
-    <HelpKINode Title="CBCrypt Members" Url="html/1878512583.htm" />
+  <HelpKINode Title="CBCrypt.GenerateHighCostSecret method" Url="html/1905304697.htm" />
+  <HelpKINode Title="CBCrypt.GenerateKeyPair method" Url="html/1564874448.htm" />
+  <HelpKINode Title="CBCryptHostId property" Url="html/481982644.htm" />
+  <HelpKINode Title="CBCryptKey class">
+    <HelpKINode Title="CBCryptKey Class" Url="html/1441647171.htm" />
+    <HelpKINode Title="CBCryptKey Members" Url="html/1163784371.htm" />
+    <HelpKINode Title="about CBCryptKey class" Url="html/1441647171.htm" />
+    <HelpKINode Title="all members" Url="html/1163784371.htm" />
+    <HelpKINode Title="constructor" Url="html/965374767.htm" />
+    <HelpKINode Title="methods" Url="html/2143963147.htm" />
+    <HelpKINode Title="properties" Url="html/1581295153.htm" />
   </HelpKINode>
-  <HelpKINode Title="CBCrypt.GenerateKeyPair method" Url="html/417802857.htm" />
-  <HelpKINode Title="GenerateKeyPair method" Url="html/417802857.htm" />
+  <HelpKINode Title="CBCryptKey.CBCryptKey constructor" Url="html/965374767.htm" />
+  <HelpKINode Title="CBCryptKey.GetPublicKeyDerEncoded method" Url="html/939002703.htm" />
+  <HelpKINode Title="CBCryptKey.GetSharedSecret method" Url="html/232981836.htm" />
+  <HelpKINode Title="CBCryptKey.Key property" Url="html/2075119955.htm" />
+  <HelpKINode Title="Challenge class">
+    <HelpKINode Title="Challenge Class" Url="html/1415551336.htm" />
+    <HelpKINode Title="Challenge Members" Url="html/952553138.htm" />
+    <HelpKINode Title="about Challenge class" Url="html/1415551336.htm" />
+    <HelpKINode Title="all members" Url="html/952553138.htm" />
+    <HelpKINode Title="constructor" Url="html/1955941255.htm" />
+    <HelpKINode Title="methods" Url="html/1581038909.htm" />
+    <HelpKINode Title="properties" Url="html/508581146.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Challenge.CBCryptHostId property" Url="html/481982644.htm" />
+  <HelpKINode Title="Challenge.Challenge constructor" Url="html/1955941255.htm" />
+  <HelpKINode Title="Challenge.ChallengeBytes property" Url="html/1534636348.htm" />
+  <HelpKINode Title="Challenge.GenerateChallengeResponseBytes method" Url="html/1948183430.htm" />
+  <HelpKINode Title="Challenge.GetServerPublicDer method" Url="html/583375642.htm" />
+  <HelpKINode Title="Challenge.ServerPublicKeyDerEncoded property" Url="html/1734766934.htm" />
+  <HelpKINode Title="Challenge.TryValidateChallengeResponse method" Url="html/1917065220.htm" />
+  <HelpKINode Title="ChallengeBytes property" Url="html/1534636348.htm" />
+  <HelpKINode Title="ChallengeResponse class">
+    <HelpKINode Title="ChallengeResponse Class" Url="html/1888296670.htm" />
+    <HelpKINode Title="ChallengeResponse Members" Url="html/104880745.htm" />
+    <HelpKINode Title="about ChallengeResponse class" Url="html/1888296670.htm" />
+    <HelpKINode Title="all members" Url="html/104880745.htm" />
+    <HelpKINode Title="constructor" Url="html/1494598437.htm" />
+    <HelpKINode Title="methods" Url="html/151453034.htm" />
+    <HelpKINode Title="properties" Url="html/1369563518.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ChallengeResponse.ChallengeResponse constructor" Url="html/1494598437.htm" />
+  <HelpKINode Title="ChallengeResponse.ChallengeResponseBytes property" Url="html/423211944.htm" />
+  <HelpKINode Title="ChallengeResponse.PublicKeyDerEncoded property" Url="html/517266944.htm" />
+  <HelpKINode Title="ChallengeResponseBytes property" Url="html/423211944.htm" />
+  <HelpKINode Title="GenerateChallengeResponseBytes method" Url="html/1948183430.htm" />
+  <HelpKINode Title="GenerateHighCostSecret method" Url="html/1905304697.htm" />
+  <HelpKINode Title="GenerateKeyPair method" Url="html/1564874448.htm" />
+  <HelpKINode Title="GetPublicKeyDerEncoded method" Url="html/939002703.htm" />
+  <HelpKINode Title="GetServerPublicDer method" Url="html/583375642.htm" />
+  <HelpKINode Title="GetSharedSecret method" Url="html/232981836.htm" />
+  <HelpKINode Title="Key property" Url="html/2075119955.htm" />
+  <HelpKINode Title="Org.CBCrypt namespace" Url="html/1514855079.htm" />
+  <HelpKINode Title="Org.CBCrypt.CBCrypt class">
+    <HelpKINode Title="CBCrypt Class" Url="html/1718333260.htm" />
+    <HelpKINode Title="CBCrypt Members" Url="html/998664710.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Org.CBCrypt.CBCryptKey class">
+    <HelpKINode Title="CBCryptKey Class" Url="html/1441647171.htm" />
+    <HelpKINode Title="CBCryptKey Members" Url="html/1163784371.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Org.CBCrypt.Challenge class">
+    <HelpKINode Title="Challenge Class" Url="html/1415551336.htm" />
+    <HelpKINode Title="Challenge Members" Url="html/952553138.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Org.CBCrypt.ChallengeResponse class">
+    <HelpKINode Title="ChallengeResponse Class" Url="html/1888296670.htm" />
+    <HelpKINode Title="ChallengeResponse Members" Url="html/104880745.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PublicKeyDerEncoded property" Url="html/517266944.htm" />
+  <HelpKINode Title="ServerPublicKeyDerEncoded property" Url="html/1734766934.htm" />
+  <HelpKINode Title="TryValidateChallengeResponse method" Url="html/1917065220.htm" />
 </HelpKI>

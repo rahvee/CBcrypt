@@ -1,11 +1,59 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <HelpTOC>
 
-  <HelpTOCNode Id="1ca77620-712f-4345-9eec-53ac73e81480" Title="CBCrypt Namespace" Url="html/977195788.htm">
-    <HelpTOCNode Id="5c2e77de-388f-48cf-aad0-af58dd4aa5bf" Title="CBCrypt Class" Url="html/1678092925.htm">
-      <HelpTOCNode Title="CBCrypt Members" Url="html/1878512583.htm" />
-      <HelpTOCNode Id="b6afaf1e-6a40-4ac4-80dd-9ba3e18f6084" Title="CBCrypt Methods" Url="html/755539668.htm">
-        <HelpTOCNode Title="GenerateKeyPair Method " Url="html/417802857.htm" />
+  <HelpTOCNode Id="bd4a7e6e-c078-4f4b-90b2-782383b4c847" Title="Org.CBCrypt Namespace" Url="html/1514855079.htm">
+    <HelpTOCNode Id="b7c557a6-6728-41e9-bf7a-3f18f6baaae7" Title="CBCrypt Class" Url="html/1718333260.htm">
+      <HelpTOCNode Title="CBCrypt Members" Url="html/998664710.htm" />
+      <HelpTOCNode Id="d0e261d7-5b5f-498f-b0fc-8e885d998621" Title="CBCrypt Methods" Url="html/463588477.htm">
+        <HelpTOCNode Title="GenerateHighCostSecret Method " Url="html/1905304697.htm" />
+        <HelpTOCNode Id="a9d82a63-3c7c-4def-9b67-d7e02198298e" Title="GenerateKeyPair Method " Url="html/1564874448.htm">
+          <HelpTOCNode Title="GenerateKeyPair Method (String, String, String)" Url="html/718221398.htm" />
+          <HelpTOCNode Title="GenerateKeyPair Method ()" Url="html/326356533.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="3ca37836-89c2-4919-80a0-66fc9eaea6f2" Title="CBCryptKey Class" Url="html/1441647171.htm">
+      <HelpTOCNode Title="CBCryptKey Members" Url="html/1163784371.htm" />
+      <HelpTOCNode Id="954239eb-c27d-424f-b2f9-e9c8848326af" Title="CBCryptKey Constructor " Url="html/965374767.htm">
+        <HelpTOCNode Title="CBCryptKey Constructor (String, String, String)" Url="html/1882239146.htm" />
+        <HelpTOCNode Title="CBCryptKey Constructor ()" Url="html/609681953.htm" />
+        <HelpTOCNode Title="CBCryptKey Constructor (AsymmetricCipherKeyPair)" Url="html/1050510383.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="48c6e87f-0102-4bdd-8954-37198c9cee51" Title="CBCryptKey Methods" Url="html/2143963147.htm">
+        <HelpTOCNode Id="4af20499-2e06-4fdd-9502-256b87ef61eb" Title="GetPublicKeyDerEncoded Method " Url="html/939002703.htm">
+          <HelpTOCNode Title="GetPublicKeyDerEncoded Method (AsymmetricCipherKeyPair)" Url="html/1961160179.htm" />
+          <HelpTOCNode Title="GetPublicKeyDerEncoded Method " Url="html/1750187521.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Id="a8f98a5f-af27-446e-9e29-65b31d72a86a" Title="GetSharedSecret Method " Url="html/232981836.htm">
+          <HelpTOCNode Title="GetSharedSecret Method (AsymmetricCipherKeyPair, )" Url="html/46105457.htm" />
+          <HelpTOCNode Title="GetSharedSecret Method ()" Url="html/448759364.htm" />
+        </HelpTOCNode>
+      </HelpTOCNode>
+      <HelpTOCNode Id="492d8a17-62e1-4f21-8f79-76ddf0c8e124" Title="CBCryptKey Properties" Url="html/1581295153.htm">
+        <HelpTOCNode Title="Key Property " Url="html/2075119955.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="60271c60-edca-4510-b8ef-acd65d62c0c3" Title="Challenge Class" Url="html/1415551336.htm">
+      <HelpTOCNode Title="Challenge Members" Url="html/952553138.htm" />
+      <HelpTOCNode Title="Challenge Constructor " Url="html/1955941255.htm" />
+      <HelpTOCNode Id="e0ce33f3-31a5-453e-a87b-b9632b7a29b6" Title="Challenge Methods" Url="html/1581038909.htm">
+        <HelpTOCNode Title="GenerateChallengeResponseBytes Method " Url="html/1948183430.htm" />
+        <HelpTOCNode Title="GetServerPublicDer Method " Url="html/583375642.htm" />
+        <HelpTOCNode Title="TryValidateChallengeResponse Method " Url="html/1917065220.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="0ef7f9e9-b882-4562-99ad-034f9804b4b4" Title="Challenge Properties" Url="html/508581146.htm">
+        <HelpTOCNode Title="CBCryptHostId Property " Url="html/481982644.htm" />
+        <HelpTOCNode Title="ChallengeBytes Property " Url="html/1534636348.htm" />
+        <HelpTOCNode Title="ServerPublicKeyDerEncoded Property " Url="html/1734766934.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="575fccc7-4256-437a-b524-c9fe2cfa0a75" Title="ChallengeResponse Class" Url="html/1888296670.htm">
+      <HelpTOCNode Title="ChallengeResponse Members" Url="html/104880745.htm" />
+      <HelpTOCNode Title="ChallengeResponse Constructor " Url="html/1494598437.htm" />
+      <HelpTOCNode Title="ChallengeResponse Methods" Url="html/151453034.htm" />
+      <HelpTOCNode Id="ca91536a-c327-4e7b-99d3-86dc1c5c927d" Title="ChallengeResponse Properties" Url="html/1369563518.htm">
+        <HelpTOCNode Title="ChallengeResponseBytes Property " Url="html/423211944.htm" />
+        <HelpTOCNode Title="PublicKeyDerEncoded Property " Url="html/517266944.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
   </HelpTOCNode>
