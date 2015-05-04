@@ -107,7 +107,7 @@ namespace Org.CBCrypt
 		/// Returns seeded PRNG
 		/// Someday, we might want to add more variants on digests.  But for now, Sha256 is the only option.
 		/// </summary>
-		private static SecureRandom GetSeededDigestRandomGenerator(byte[] seed)
+		public static SecureRandom GetSeededDigestRandomGenerator(byte[] seed)
 		{
 			var prng = new DigestRandomGenerator(new Sha256Digest());
 			prng.AddSeedMaterial(seed);
@@ -129,7 +129,11 @@ namespace Org.CBCrypt
 		public static AsymmetricCipherKeyPair GenerateKeyPair(byte[] HighCostSecret)
 		{
 			SecureRandom seededPRNG = GetSeededDigestRandomGenerator(HighCostSecret);
+			return GenerateKeyPair(seededPRNG);
+		}
 
+		public static AsymmetricCipherKeyPair GenerateKeyPair(SecureRandom seededPRNG)
+		{
 			// Algorithm possibilities:  "EC", "ECDSA", "ECDH", "ECDHC", "ECGOST3410", "ECMQV"
 			// Default if none specified:  "EC"
 			var ec = new ECKeyPairGenerator("ECDH");

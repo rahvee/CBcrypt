@@ -115,12 +115,14 @@ namespace NUnitTest
 			 */
 			// Now since this is just a Unit Test, using a hard-coded CBCryptHostId, username, and password, we want to confirm that we
 			// have determinstically recreated the same keypair that we've previously generated for testing.  So we check as follows:
-			byte[] clientPrivateDer = PrivateKeyInfoFactory.CreatePrivateKeyInfo(clientKey.Key.Private).GetDerEncoded();
+			byte[] clientPrivateDer = PrivateKeyInfoFactory.CreatePrivateKeyInfo(clientKey.AsymmetricKey.Private).GetDerEncoded();
 			string clientPrivateBase64 = Convert.ToBase64String(clientPrivateDer);
-			Assert.IsTrue(clientPrivateBase64 == @"MIIB8wIBADCB4wYHKoZIzj0CATCB1wIBATAsBgcqhkjOPQEBAiEA/////wAAAAEAAAAAAAAAAAAAAAD///////////////8wWwQg/////wAAAAEAAAAAAAAAAAAAAAD///////////////wEIFrGNdiqOpPns+u9VXaYhrxlHQawzFOw9jvOPD4n0mBLAxUAxJ02CIbnBJNqZnjhE50mt4GffpAEIQNrF9Hy4SxCR/i85uVjpEDydwN9gS3rM6D0oTlF2JjClgIhAP////8AAAAA//////////+85vqtpxeehPO5ysL8YyVRAgEBBIIBBjCCAQICAQEEIAqo5o7QbH4BQhMfctkCYZ9r5HpP3MKYsHTDVeLURVXcoIHaMIHXAgEBMCwGByqGSM49AQECIQD/////AAAAAQAAAAAAAAAAAAAAAP///////////////zBbBCD/////AAAAAQAAAAAAAAAAAAAAAP///////////////AQgWsY12Ko6k+ez671VdpiGvGUdBrDMU7D2O848PifSYEsDFQDEnTYIhucEk2pmeOETnSa3gZ9+kAQhA2sX0fLhLEJH+Lzm5WOkQPJ3A32BLeszoPShOUXYmMKWAiEA/////wAAAAD//////////7zm+q2nF56E87nKwvxjJVECAQE=");
+			Assert.IsTrue(clientPrivateBase64 == @"MIIB8wIBADCB4wYHKoZIzj0CATCB1wIBATAsBgcqhkjOPQEBAiEA/////wAAAAEAAAAAAAAAAAAAAAD///////////////8wWwQg/////wAAAAEAAAAAAAAAAAAAAAD///////////////wEIFrGNdiqOpPns+u9VXaYhrxlHQawzFOw9jvOPD4n0mBLAxUAxJ02CIbnBJNqZnjhE50mt4GffpAEIQNrF9Hy4SxCR/i85uVjpEDydwN9gS3rM6D0oTlF2JjClgIhAP////8AAAAA//////////+85vqtpxeehPO5ysL8YyVRAgEBBIIBBjCCAQICAQEEIAqo5o7QbH4BQhMfctkCYZ9r5HpP3MKYsHTDVeLURVXcoIHaMIHXAgEBMCwGByqGSM49AQECIQD/////AAAAAQAAAAAAAAAAAAAAAP///////////////zBbBCD/////AAAAAQAAAAAAAAAAAAAAAP///////////////AQgWsY12Ko6k+ez671VdpiGvGUdBrDMU7D2O848PifSYEsDFQDEnTYIhucEk2pmeOETnSa3gZ9+kAQhA2sX0fLhLEJH+Lzm5WOkQPJ3A32BLeszoPShOUXYmMKWAiEA/////wAAAAD//////////7zm+q2nF56E87nKwvxjJVECAQE=","clientPrivateBase64");
 			byte[] clientPublicDer = clientKey.GetPublicKeyDerEncoded();
 			string clientPublicBase64 = Convert.ToBase64String(clientPublicDer);
-			Assert.IsTrue(clientPublicBase64 == @"MIIBKjCB4wYHKoZIzj0CATCB1wIBATAsBgcqhkjOPQEBAiEA/////wAAAAEAAAAAAAAAAAAAAAD///////////////8wWwQg/////wAAAAEAAAAAAAAAAAAAAAD///////////////wEIFrGNdiqOpPns+u9VXaYhrxlHQawzFOw9jvOPD4n0mBLAxUAxJ02CIbnBJNqZnjhE50mt4GffpAEIQNrF9Hy4SxCR/i85uVjpEDydwN9gS3rM6D0oTlF2JjClgIhAP////8AAAAA//////////+85vqtpxeehPO5ysL8YyVRAgEBA0IABDaM1UPl14Gq5yM4T4zpl2KPaB9CGiMhjNJv/PmMJC0dh/ayytfoGZ0CuS7EiHLK37Y5rq5Q10FOsK2z6UjYugY=");
+			Assert.IsTrue(clientPublicBase64 == @"MIIBKjCB4wYHKoZIzj0CATCB1wIBATAsBgcqhkjOPQEBAiEA/////wAAAAEAAAAAAAAAAAAAAAD///////////////8wWwQg/////wAAAAEAAAAAAAAAAAAAAAD///////////////wEIFrGNdiqOpPns+u9VXaYhrxlHQawzFOw9jvOPD4n0mBLAxUAxJ02CIbnBJNqZnjhE50mt4GffpAEIQNrF9Hy4SxCR/i85uVjpEDydwN9gS3rM6D0oTlF2JjClgIhAP////8AAAAA//////////+85vqtpxeehPO5ysL8YyVRAgEBA0IABDaM1UPl14Gq5yM4T4zpl2KPaB9CGiMhjNJv/PmMJC0dh/ayytfoGZ0CuS7EiHLK37Y5rq5Q10FOsK2z6UjYugY=","clientPublicBase64");
+			string symmetricKeyBase64 = Convert.ToBase64String(clientKey.SymmetricKey);
+			Assert.IsTrue(symmetricKeyBase64 == @"CqjmjtBsfgFCEx9y2QJhn2vkek/cwpiwdMNV4tRFVdw=", "symmetricKeyBase64");
 
 			/*
 			 *   4. The client generates ChallengeResponse from clientKey and serverChallengeDeserialized. Sends ChallengeResponse to server
@@ -148,4 +150,3 @@ namespace NUnitTest
 		}
 	}
 }
-
