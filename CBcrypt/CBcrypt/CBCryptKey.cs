@@ -27,7 +27,7 @@ namespace Org.CBCrypt
 		private void GenerateKeys(byte[] highCostSecret)
 		{
 			SecureRandom seededPRNG = CBCrypt.GetSeededDigestRandomGenerator(highCostSecret);
-			this.AsymmetricKey = CBCrypt.GenerateKeyPair(highCostSecret);
+			this.AsymmetricKey = CBCrypt.GenerateKeyPair(seededPRNG);
 			this.SymmetricKey = new byte[32];
 			seededPRNG.NextBytes(this.SymmetricKey);
 		}
