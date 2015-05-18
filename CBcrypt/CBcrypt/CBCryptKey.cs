@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Security;
@@ -41,7 +42,11 @@ namespace Org.CBCrypt
 			var remotePublicKey = PublicKeyFactory.CreateKey(remotePublicKeyDerEncoded);
 			var agreement = new ECDHBasicAgreement();
 			agreement.Init(localKeyWithPrivate.Private);
-			return agreement.CalculateAgreement(remotePublicKey).ToByteArray();
+			using (var sha = SHA256.Create()) {
+				// CalculateAgreement returns a BigInteger, whose length is variable, and bits are not whitened.
+				// So hash it.
+				return sha.ComputeHash(agreement.CalculateAgreement(remotePublicKey).ToByteArray());
+			}
 		}
 
 		public byte[] GetPublicKeyDerEncoded()

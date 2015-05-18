@@ -122,7 +122,7 @@ namespace NUnitTest
 			string clientPublicBase64 = Convert.ToBase64String(clientPublicDer);
 			Assert.IsTrue(clientPublicBase64 == @"MIIBKjCB4wYHKoZIzj0CATCB1wIBATAsBgcqhkjOPQEBAiEA/////wAAAAEAAAAAAAAAAAAAAAD///////////////8wWwQg/////wAAAAEAAAAAAAAAAAAAAAD///////////////wEIFrGNdiqOpPns+u9VXaYhrxlHQawzFOw9jvOPD4n0mBLAxUAxJ02CIbnBJNqZnjhE50mt4GffpAEIQNrF9Hy4SxCR/i85uVjpEDydwN9gS3rM6D0oTlF2JjClgIhAP////8AAAAA//////////+85vqtpxeehPO5ysL8YyVRAgEBA0IABDaM1UPl14Gq5yM4T4zpl2KPaB9CGiMhjNJv/PmMJC0dh/ayytfoGZ0CuS7EiHLK37Y5rq5Q10FOsK2z6UjYugY=","clientPublicBase64");
 			string symmetricKeyBase64 = Convert.ToBase64String(clientKey.SymmetricKey);
-			Assert.IsTrue(symmetricKeyBase64 == @"CqjmjtBsfgFCEx9y2QJhn2vkek/cwpiwdMNV4tRFVdw=", "symmetricKeyBase64");
+			Assert.IsTrue(symmetricKeyBase64 == @"xvPRXfBrh2Pj++oNdatKTRf6gNj/50JAxmvCD4bGmVk=", "symmetricKeyBase64");
 
 			/*
 			 *   4. The client generates ChallengeResponse from clientKey and serverChallengeDeserialized. Sends ChallengeResponse to server
