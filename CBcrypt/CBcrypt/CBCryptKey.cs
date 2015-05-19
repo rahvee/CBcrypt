@@ -48,6 +48,17 @@ namespace Org.CBCrypt
 				return sha.ComputeHash(agreement.CalculateAgreement(remotePublicKey).ToByteArray());
 			}
 		}
+		/// <summary>
+		/// Sometimes returns number of bytes != 32
+		/// </summary>
+		[Obsolete("Used only for backward compatibility with a broken version of CBCrypt")]
+		public static byte[] GetObsoleteSharedSecret(AsymmetricCipherKeyPair localKeyWithPrivate, byte[] remotePublicKeyDerEncoded)
+		{
+			var remotePublicKey = PublicKeyFactory.CreateKey(remotePublicKeyDerEncoded);
+			var agreement = new ECDHBasicAgreement();
+			agreement.Init(localKeyWithPrivate.Private);
+			return agreement.CalculateAgreement(remotePublicKey).ToByteArray();
+		}
 
 		public byte[] GetPublicKeyDerEncoded()
 		{
@@ -56,6 +67,14 @@ namespace Org.CBCrypt
 		public byte[] GetSharedSecret(byte[] remotePublicKeyDerEncoded)
 		{
 			return GetSharedSecret(AsymmetricKey, remotePublicKeyDerEncoded);
+		}
+		/// <summary>
+		/// Sometimes returns number of bytes != 32
+		/// </summary>
+		[Obsolete("Used only for backward compatibility with a broken version of CBCrypt")]
+		public byte[] GetObsoleteSharedSecret(byte[] remotePublicKeyDerEncoded)
+		{
+			return GetObsoleteSharedSecret(AsymmetricKey, remotePublicKeyDerEncoded);
 		}
 
 		~CBCryptKey ()
